@@ -32,13 +32,12 @@ Because a missed big car is the costly error, the decision threshold is set low 
 
 ## 3. Model
 
-_TODO after notebook 02: paste the numbers from your own run._
-
 - **Baseline:** ImageNet ResNet-18 with a **frozen backbone**; only a new 2-class head is trained.
 - **Trained model:** the same ResNet-18 with **all layers fine-tuned**. This is the *only* difference from the baseline: same data, augmentation (random crop, horizontal flip, colour jitter), class-weighted cross-entropy, AdamW with cosine schedule, 8 epochs, seed 42. We keep the epoch with the best **validation macro-F1**.
 - **Key settings:** input 224×224 · batch 64 · lr 1e-3 (frozen) / 2e-4 (fine-tuned) · weight decay 1e-4
 - **Curves:** `results/curves.png`
-- **Result (validation macro-F1):** baseline _x.xxx_ → fine-tuned _x.xxx_
+- **Result (best validation epoch):** baseline macro-F1 **0.880** (accuracy 0.893) → fine-tuned macro-F1 **0.955** (accuracy 0.961).
+- **Reading the curves:** the frozen baseline's train and val loss stay close together, so it is limited by what the frozen ImageNet features can express (underfitting). The fine-tuned model reaches 99.5 % train accuracy while val loss levels off at about 0.14 from epoch 3, a mild sign of overfitting. Keeping the best-validation epoch protects the saved model from it.
 
 ## 4. Foundation component: CLIP (ViT-B/16)
 
@@ -47,37 +46,48 @@ A 2-class ResNet **must** answer big or small, even for a person, a bus or an em
 1. **Not-a-car gate:** CLIP compares the photo with car prompts and non-car prompts ("a photo of a person", "an empty parking space", "a bus", "a motorcycle", …). If p(not a car) ≥ threshold, the answer is **not a car**. The threshold is the lowest value that rejects ≤ 1 % of validation car photos.
 2. **Second opinion:** `p_big = w · ResNet + (1 − w) · CLIP`, with `w` chosen on validation by log-loss.
 
-_TODO after notebook 03:_ chosen `w` = _x.xx_, gate threshold = _x.xx_. Non-car photos rejected: _x / 18_ (`results/not_a_car_gate.png`, `results/mixing_weight.png`).
+**Results (validation, notebook 03):**
+- CLIP zero-shot, with **no training at all**, reaches macro-F1 **0.941**. The fine-tuned ResNet reaches 0.955.
+- Mixing them with **w = 0.8** (80 % ResNet, 20 % CLIP) gives the lowest validation log-loss (0.097, against 0.125 for ResNet alone) and macro-F1 **0.959**. So CLIP adds a small but real improvement and makes the probabilities better calibrated, which matters because we threshold them.
+- Not-a-car gate: threshold **0.30** rejects **0.0 %** of validation car photos and **18 / 18** non-car photos (people, animals, text, a rocket, textures…).
+- Plots: `results/mixing_weight.png`, `results/not_a_car_gate.png`
 
 ## 5. Evaluation (sealed test set: unseen car models)
 
-_TODO after notebook 04: paste the table from its last cell._
+Test set: **2,189 images (553 big) from 21 car families never seen in training.**
 
-| model | accuracy @0.5 | F1(big) @0.5 | recall(big) @0.5 | avg precision |
-|---|---|---|---|---|
-| CLIP zero-shot (no training) | | | | |
-| ResNet-18 frozen (baseline) | | | | |
-| ResNet-18 fine-tuned | | | | |
-| Fine-tuned + CLIP mix | | | | |
+| model | accuracy @0.5 | F1(big) @0.5 | recall(big) @0.5 | avg precision (PR-AUC) |
+|:--|--:|--:|--:|--:|
+| CLIP zero-shot (no training) | 0.938 | 0.864 | 0.781 | 0.904 |
+| ResNet-18 frozen (baseline) | 0.851 | 0.732 | 0.807 | 0.822 |
+| ResNet-18 fine-tuned | 0.925 | 0.856 | 0.888 | 0.935 |
+| **Fine-tuned + CLIP mix (w = 0.8)** | 0.928 | 0.861 | 0.888 | **0.948** |
+
+Fine-tuning beats the frozen baseline on every metric (PR-AUC 0.822 → 0.935). Adding CLIP raises PR-AUC further to 0.948. CLIP alone has high accuracy but the lowest recall for big cars (0.781): it leans towards calling cars small.
 
 - **PR curve:** `results/pr_curve.png` · **Confusion matrix:** `results/confusion_matrix.png` · **Accuracy by body type:** `results/accuracy_by_body_type.csv`
-- **Threshold:** _0.xx_. We chose it on **validation** as the highest p(big) threshold that keeps recall(big) ≥ 95 %. A missed big car is the expensive error, so we accept extra small cars being sent to the large-bay levels.
-- **Full system on test:** recall(big) _xx %_ · precision(big) _xx %_ · big cars missed _n_ · small cars sent to big levels _n_ · real cars called "not a car" _x %_
+- **Threshold: 0.20** instead of the default 0.5. We chose it on **validation** as the highest p(big) threshold that keeps recall(big) ≥ 95 % (validation: recall 95.2 %, precision 93.6 %). A missed big car is the expensive error, so we accept extra small cars being sent to the large-bay levels.
+- **Full system on test (threshold 0.20):** recall(big) **91.9 %** · precision(big) **78.9 %** · F1(big) **0.849** · big cars missed **45** of 553 · small cars sent to big levels **136** of 1,636 · real cars called "not a car" **0.0 %**
+- **Against our target** (recall ≥ 95 %, precision ≥ 80 %): we **missed both, narrowly**. The threshold met the target on validation but did not fully transfer to unseen car families. Accuracy by body type (`results/accuracy_by_body_type.csv`) shows where: vans 100 %, pickups 98.8 %, minivans 98.8 %, coupes 99.8 %, convertibles 98.0 %, but **SUVs only 83.5 % and hatchbacks only 76.7 %**. Section 6 explains why.
 
 ## 6. Failure analysis
 
-_TODO after notebook 04: pick 5+ images from `results/failures/` (listed in `failures.csv`)._
+All 12 most-confident test mistakes come from just **three car models**, all on the border between our two classes. Overview: `results/failures_overview.png`.
 
-| # | Image | Car model | Mistake | Likely cause | Fix tried / would try |
+| # | Image | Car model | Mistake (p_big) | Likely cause | Fix tried / would try |
 |---|---|---|---|---|---|
-| 1 | `results/failures/01_...jpg` | | missed big | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
+| 1 | `results/failures/01_missed-big_SUV.jpg` | Hyundai Tucson SUV 2012 | big → small (0.004) | A **compact crossover**: car-height roofline and hatchback-like rear seen from behind. No Tucson was in training (split by family), and the model learned "SUV = tall and boxy". | Label "big" by real dimensions (height/length from a spec table) instead of the body-type word. Add more compact crossovers to training. |
+| 2 | `results/failures/02_missed-big_SUV.jpg` | Hyundai Tucson SUV 2012 | big → small (0.008) | Side view against a plain background: without nearby objects there is **no sense of scale**, so a small SUV and a large hatchback look alike. | An entrance camera has a fixed position, so car size in pixels becomes a usable cue. Fine-tune on photos from the real camera. |
+| 3 | `results/failures/03_missed-big_SUV.jpg` | Hyundai Tucson SUV 2012 | big → small (0.010) | Dealer advert with a large text banner covering part of the car: the network gets less of the body shape. | Tried: the CLIP mix (raised test PR-AUC from 0.935 to 0.948) but did not rescue the Tucson. Would try: crop to the car with a detector first. |
+| 4 | `results/failures/07_false-big_Hatchback.jpg` | Nissan Juke Hatchback 2012 | small → big (0.950) | The Juke is a **tall, SUV-styled hatchback** (high bonnet, wheel arches): visually it *is* a small crossover. Arguably the label, not the model, is wrong for parking. | Add a third class ("crossover / check") or decide by measured height. Would try: hard-example mining on tall hatchbacks. |
+| 5 | `results/failures/08_false-big_Hatchback.jpg` | Scion xD Hatchback 2012 | small → big (0.947) | Boxy shape and upright tailgate look like a mini SUV, and the low threshold (0.20) pushes borderline cars to "big" on purpose. | A cheap error by our use case (it only wastes a large bay). Could raise the threshold if we accept more missed SUVs. The PR curve shows the trade-off. |
+| 6 | `results/failures/09_false-big_Hatchback.jpg` | Nissan Juke Hatchback 2012 | small → big (0.910) | Showroom photo, low camera angle: makes the car look taller and bigger. | Augment with camera-height changes. Evaluate on photos from the real entrance-camera height. |
+
+**Main lesson:** the hard cases are not random. They are **crossovers**, the one car type whose "big vs small" label is genuinely ambiguous. Body-type names from 2012 don't capture it.
 
 ## 7. Limitations
 
+- **Test recall 91.9 % is below our 95 % target.** The threshold chosen on validation did not fully transfer to unseen families with ambiguous shapes (Hyundai Tucson). A deployment would need the threshold re-checked on footage from the actual car park.
 - "Big" means **body type**, not real dimensions. A real car park would care about height and length. It would need a size measurement (calibrated camera or sensors) or a per-model size lookup.
 - Trained on **web photos**: clean, well-lit, mostly side and front views. An entrance camera sees cars from above, at night, in rain and partly hidden by barriers, so accuracy would drop. Production would need footage from the real camera to fine-tune and test.
 - Car models from **2012 and earlier** only. Newer designs (crossovers that look between SUV and hatchback) are exactly the hard cases.
