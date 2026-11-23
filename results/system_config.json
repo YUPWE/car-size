@@ -1,0 +1,7 @@
+{
+  "w": 0.8,
+  "oos_threshold": 0.3,
+  "clip_model": "openai/clip-vit-base-patch16",
+  "big_threshold": 0.2,
+  "target_recall_big": 0.95
+}

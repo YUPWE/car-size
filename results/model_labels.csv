@@ -1,0 +1,197 @@
+model,body,label
+AM General Hummer SUV 2000,SUV,big
+Acura Integra Type R 2001,Coupe,small
+Acura RL Sedan 2012,Sedan,small
+Acura TL Sedan 2012,Sedan,small
+Acura TL Type-S 2008,Sedan,small
+Acura TSX Sedan 2012,Sedan,small
+Acura ZDX Hatchback 2012,Hatchback,small
+Aston Martin V8 Vantage Convertible 2012,Convertible,small
+Aston Martin V8 Vantage Coupe 2012,Coupe,small
+Aston Martin Virage Convertible 2012,Convertible,small
+Aston Martin Virage Coupe 2012,Coupe,small
+Audi 100 Sedan 1994,Sedan,small
+Audi 100 Wagon 1994,Wagon,small
+Audi A5 Coupe 2012,Coupe,small
+Audi R8 Coupe 2012,Coupe,small
+Audi RS 4 Convertible 2008,Convertible,small
+Audi S4 Sedan 2007,Sedan,small
+Audi S4 Sedan 2012,Sedan,small
+Audi S5 Convertible 2012,Convertible,small
+Audi S5 Coupe 2012,Coupe,small
+Audi S6 Sedan 2011,Sedan,small
+Audi TT Hatchback 2011,Hatchback,small
+Audi TT RS Coupe 2012,Coupe,small
+Audi TTS Coupe 2012,Coupe,small
+Audi V8 Sedan 1994,Sedan,small
+BMW 1 Series Convertible 2012,Convertible,small
+BMW 1 Series Coupe 2012,Coupe,small
+BMW 3 Series Sedan 2012,Sedan,small
+BMW 3 Series Wagon 2012,Wagon,small
+BMW 6 Series Convertible 2007,Convertible,small
+BMW ActiveHybrid 5 Sedan 2012,Sedan,small
+BMW M3 Coupe 2012,Coupe,small
+BMW M5 Sedan 2010,Sedan,small
+BMW M6 Convertible 2010,Convertible,small
+BMW X3 SUV 2012,SUV,big
+BMW X5 SUV 2007,SUV,big
+BMW X6 SUV 2012,SUV,big
+BMW Z4 Convertible 2012,Convertible,small
+Bentley Arnage Sedan 2009,Sedan,small
+Bentley Continental Flying Spur Sedan 2007,Sedan,small
+Bentley Continental GT Coupe 2007,Coupe,small
+Bentley Continental GT Coupe 2012,Coupe,small
+Bentley Continental Supersports Conv. Convertible 2012,Convertible,small
+Bentley Mulsanne Sedan 2011,Sedan,small
+Bugatti Veyron 16.4 Convertible 2009,Convertible,small
+Bugatti Veyron 16.4 Coupe 2009,Coupe,small
+Buick Enclave SUV 2012,SUV,big
+Buick Rainier SUV 2007,SUV,big
+Buick Regal GS 2012,Sedan,small
+Buick Verano Sedan 2012,Sedan,small
+Cadillac CTS-V Sedan 2012,Sedan,small
+Cadillac Escalade EXT Crew Cab 2007,Cab,big
+Cadillac SRX SUV 2012,SUV,big
+Chevrolet Avalanche Crew Cab 2012,Cab,big
+Chevrolet Camaro Convertible 2012,Convertible,small
+Chevrolet Cobalt SS 2010,Coupe,small
+Chevrolet Corvette Convertible 2012,Convertible,small
+Chevrolet Corvette Ron Fellows Edition Z06 2007,Coupe,small
+Chevrolet Corvette ZR1 2012,Coupe,small
+Chevrolet Express Cargo Van 2007,Van,big
+Chevrolet Express Van 2007,Van,big
+Chevrolet HHR SS 2010,Wagon,small
+Chevrolet Impala Sedan 2007,Sedan,small
+Chevrolet Malibu Hybrid Sedan 2010,Sedan,small
+Chevrolet Malibu Sedan 2007,Sedan,small
+Chevrolet Monte Carlo Coupe 2007,Coupe,small
+Chevrolet Silverado 1500 Classic Extended Cab 2007,Cab,big
+Chevrolet Silverado 1500 Extended Cab 2012,Cab,big
+Chevrolet Silverado 1500 Hybrid Crew Cab 2012,Cab,big
+Chevrolet Silverado 1500 Regular Cab 2012,Cab,big
+Chevrolet Silverado 2500HD Regular Cab 2012,Cab,big
+Chevrolet Sonic Sedan 2012,Sedan,small
+Chevrolet Tahoe Hybrid SUV 2012,SUV,big
+Chevrolet TrailBlazer SS 2009,SUV,big
+Chevrolet Traverse SUV 2012,SUV,big
+Chrysler 300 SRT-8 2010,Sedan,small
+Chrysler Aspen SUV 2009,SUV,big
+Chrysler Crossfire Convertible 2008,Convertible,small
+Chrysler PT Cruiser Convertible 2008,Convertible,small
+Chrysler Sebring Convertible 2010,Convertible,small
+Chrysler Town and Country Minivan 2012,Minivan,big
+Daewoo Nubira Wagon 2002,Wagon,small
+Dodge Caliber Wagon 2007,Wagon,small
+Dodge Caliber Wagon 2012,Wagon,small
+Dodge Caravan Minivan 1997,Minivan,big
+Dodge Challenger SRT8 2011,Coupe,small
+Dodge Charger SRT-8 2009,Sedan,small
+Dodge Charger Sedan 2012,Sedan,small
+Dodge Dakota Club Cab 2007,Cab,big
+Dodge Dakota Crew Cab 2010,Cab,big
+Dodge Durango SUV 2007,SUV,big
+Dodge Durango SUV 2012,SUV,big
+Dodge Journey SUV 2012,SUV,big
+Dodge Magnum Wagon 2008,Wagon,small
+Dodge Ram Pickup 3500 Crew Cab 2010,Cab,big
+Dodge Ram Pickup 3500 Quad Cab 2009,Cab,big
+Dodge Sprinter Cargo Van 2009,Van,big
+Eagle Talon Hatchback 1998,Hatchback,small
+FIAT 500 Abarth 2012,Hatchback,small
+FIAT 500 Convertible 2012,Convertible,small
+Ferrari 458 Italia Convertible 2012,Convertible,small
+Ferrari 458 Italia Coupe 2012,Coupe,small
+Ferrari California Convertible 2012,Convertible,small
+Ferrari FF Coupe 2012,Coupe,small
+Fisker Karma Sedan 2012,Sedan,small
+Ford E-Series Wagon Van 2012,Van,big
+Ford Edge SUV 2012,SUV,big
+Ford Expedition EL SUV 2009,SUV,big
+Ford F-150 Regular Cab 2007,Cab,big
+Ford F-150 Regular Cab 2012,Cab,big
+Ford F-450 Super Duty Crew Cab 2012,Cab,big
+Ford Fiesta Sedan 2012,Sedan,small
+Ford Focus Sedan 2007,Sedan,small
+Ford Freestar Minivan 2007,Minivan,big
+Ford GT Coupe 2006,Coupe,small
+Ford Mustang Convertible 2007,Convertible,small
+Ford Ranger SuperCab 2011,Cab,big
+GMC Acadia SUV 2012,SUV,big
+GMC Canyon Extended Cab 2012,Cab,big
+GMC Savana Van 2012,Van,big
+GMC Terrain SUV 2012,SUV,big
+GMC Yukon Hybrid SUV 2012,SUV,big
+Geo Metro Convertible 1993,Convertible,small
+HUMMER H2 SUT Crew Cab 2009,Cab,big
+HUMMER H3T Crew Cab 2010,Cab,big
+Honda Accord Coupe 2012,Coupe,small
+Honda Accord Sedan 2012,Sedan,small
+Honda Odyssey Minivan 2007,Minivan,big
+Honda Odyssey Minivan 2012,Minivan,big
+Hyundai Accent Sedan 2012,Sedan,small
+Hyundai Azera Sedan 2012,Sedan,small
+Hyundai Elantra Sedan 2007,Sedan,small
+Hyundai Elantra Touring Hatchback 2012,Hatchback,small
+Hyundai Genesis Sedan 2012,Sedan,small
+Hyundai Santa Fe SUV 2012,SUV,big
+Hyundai Sonata Hybrid Sedan 2012,Sedan,small
+Hyundai Sonata Sedan 2012,Sedan,small
+Hyundai Tucson SUV 2012,SUV,big
+Hyundai Veloster Hatchback 2012,Hatchback,small
+Hyundai Veracruz SUV 2012,SUV,big
+Infiniti G Coupe IPL 2012,Coupe,small
+Infiniti QX56 SUV 2011,SUV,big
+Isuzu Ascender SUV 2008,SUV,big
+Jaguar XK XKR 2012,Coupe,small
+Jeep Compass SUV 2012,SUV,big
+Jeep Grand Cherokee SUV 2012,SUV,big
+Jeep Liberty SUV 2012,SUV,big
+Jeep Patriot SUV 2012,SUV,big
+Jeep Wrangler SUV 2012,SUV,big
+Lamborghini Aventador Coupe 2012,Coupe,small
+Lamborghini Diablo Coupe 2001,Coupe,small
+Lamborghini Gallardo LP 570-4 Superleggera 2012,Coupe,small
+Lamborghini Reventon Coupe 2008,Coupe,small
+Land Rover LR2 SUV 2012,SUV,big
+Land Rover Range Rover SUV 2012,SUV,big
+Lincoln Town Car Sedan 2011,Sedan,small
+MINI Cooper Roadster Convertible 2012,Convertible,small
+Maybach Landaulet Convertible 2012,Convertible,small
+Mazda Tribute SUV 2011,SUV,big
+McLaren MP4-12C Coupe 2012,Coupe,small
+Mercedes-Benz 300-Class Convertible 1993,Convertible,small
+Mercedes-Benz C-Class Sedan 2012,Sedan,small
+Mercedes-Benz E-Class Sedan 2012,Sedan,small
+Mercedes-Benz S-Class Sedan 2012,Sedan,small
+Mercedes-Benz SL-Class Coupe 2009,Coupe,small
+Mercedes-Benz Sprinter Van 2012,Van,big
+Mitsubishi Lancer Sedan 2012,Sedan,small
+Nissan 240SX Coupe 1998,Coupe,small
+Nissan Juke Hatchback 2012,Hatchback,small
+Nissan Leaf Hatchback 2012,Hatchback,small
+Nissan NV Passenger Van 2012,Van,big
+Plymouth Neon Coupe 1999,Coupe,small
+Porsche Panamera Sedan 2012,Sedan,small
+Ram C/V Cargo Van Minivan 2012,Minivan,big
+Rolls-Royce Ghost Sedan 2012,Sedan,small
+Rolls-Royce Phantom Drophead Coupe Convertible 2012,Coupe,small
+Rolls-Royce Phantom Sedan 2012,Sedan,small
+Scion xD Hatchback 2012,Hatchback,small
+Spyker C8 Convertible 2009,Convertible,small
+Spyker C8 Coupe 2009,Coupe,small
+Suzuki Aerio Sedan 2007,Sedan,small
+Suzuki Kizashi Sedan 2012,Sedan,small
+Suzuki SX4 Hatchback 2012,Hatchback,small
+Suzuki SX4 Sedan 2012,Sedan,small
+Tesla Model S Sedan 2012,Sedan,small
+Toyota 4Runner SUV 2012,SUV,big
+Toyota Camry Sedan 2012,Sedan,small
+Toyota Corolla Sedan 2012,Sedan,small
+Toyota Sequoia SUV 2012,SUV,big
+Volkswagen Beetle Hatchback 2012,Hatchback,small
+Volkswagen Golf Hatchback 1991,Hatchback,small
+Volkswagen Golf Hatchback 2012,Hatchback,small
+Volvo 240 Sedan 1993,Sedan,small
+Volvo C30 Hatchback 2012,Hatchback,small
+Volvo XC90 SUV 2007,SUV,big
+smart fortwo Convertible 2012,Convertible,small

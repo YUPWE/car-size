@@ -1,0 +1,9 @@
+label,body,count,accuracy
+big,Cab,82,0.988
+big,Minivan,81,0.988
+big,SUV,261,0.835
+big,Van,129,1.0
+small,Convertible,396,0.98
+small,Coupe,406,0.998
+small,Hatchback,403,0.767
+small,Sedan,431,0.923

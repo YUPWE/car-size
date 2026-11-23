@@ -1,0 +1,13 @@
+file,model,p_big,cause,fix
+01_missed-big_SUV.jpg,Hyundai Tucson SUV 2012,0.004,Compact crossover with car-height roofline; rear view looks like a hatchback; no Tucson in training,Label big by real dimensions; add more compact crossovers
+02_missed-big_SUV.jpg,Hyundai Tucson SUV 2012,0.008,"Open landscape, nothing nearby for scale",Fine-tune on fixed entrance-camera photos where pixel size is meaningful
+03_missed-big_SUV.jpg,Hyundai Tucson SUV 2012,0.01,Dealer advert banner covers part of the car,"Tried CLIP mix (PR-AUC 0.935->0.948), not enough; crop car with a detector first"
+04_missed-big_SUV.jpg,Hyundai Tucson SUV 2012,0.011,Straight front view hides the vehicle's length and height,Multi-view or side-camera input
+05_missed-big_SUV.jpg,Hyundai Tucson SUV 2012,0.011,Car-like front-quarter view in a dealer lot,More crossover training examples
+06_missed-big_SUV.jpg,Hyundai Tucson SUV 2012,0.013,"Dark car, front-quarter view, compact proportions",More crossover training examples
+07_false-big_Hatchback.jpg,Nissan Juke Hatchback 2012,0.95,Tall SUV-styled hatchback; label ambiguous for parking,Third class 'crossover/check' or decide by measured height
+08_false-big_Hatchback.jpg,Scion xD Hatchback 2012,0.947,Boxy shape and upright tailgate; low threshold pushes borderline cars to big,Cheap error by design; raise threshold only if more missed SUVs are acceptable
+09_false-big_Hatchback.jpg,Nissan Juke Hatchback 2012,0.91,Low showroom camera angle makes the car look taller,Augment with camera-height changes
+10_false-big_Hatchback.jpg,Nissan Juke Hatchback 2012,0.89,SUV-like front and wheel arches,Hard-example mining on tall hatchbacks
+11_false-big_Hatchback.jpg,Scion xD Hatchback 2012,0.889,Boxy side profile,Label by measured dimensions
+12_false-big_Hatchback.jpg,Nissan Juke Hatchback 2012,0.877,"Studio advert photo, SUV styling",Hard-example mining on tall hatchbacks

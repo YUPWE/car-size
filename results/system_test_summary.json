@@ -1,0 +1,9 @@
+{
+ "test images": 2189,
+ "recall(big): big cars caught": "91.9%",
+ "precision(big)": "78.9%",
+ "F1(big)": "0.849",
+ "big cars sent to compact (missed)": 45,
+ "small cars sent to big levels": 136,
+ "real cars wrongly called 'not a car'": "0.0%"
+}

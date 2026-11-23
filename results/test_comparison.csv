@@ -1,0 +1,5 @@
+model,accuracy @0.5,F1(big) @0.5,recall(big) @0.5,avg precision (PR-AUC)
+CLIP zero-shot (no training),0.938,0.864,0.781,0.904
+ResNet-18 frozen (baseline),0.851,0.732,0.807,0.822
+ResNet-18 fine-tuned,0.925,0.856,0.888,0.935
+Fine-tuned + CLIP mix (w=0.8),0.928,0.861,0.888,0.948
