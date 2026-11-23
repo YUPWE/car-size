@@ -1,11 +1,3 @@
-"""The full system: ResNet-18 + CLIP -> a decision for one photo.
-
-Decision rule (same code is used for evaluation and in app.py):
-  1. CLIP says "not a car" (p_out_of_scope >= oos_threshold)  -> "not a car"
-  2. p_big = w * resnet_p_big + (1 - w) * clip_p_big
-  3. p_big >= big_threshold -> "big", otherwise -> "small"
-The big_threshold is chosen on validation so that almost every big car is caught (see notebook 04).
-"""
 import json
 import os
 
@@ -25,7 +17,6 @@ def mix(resnet_probs, clip_probs, w):
 
 
 def decide(resnet_probs, clip_probs, p_oos, w, big_threshold, oos_threshold):
-    """Vectorised decisions. Returns (decision strings, p_big)."""
     p_big = mix(resnet_probs, clip_probs, w)[:, BIG]
     decisions = np.where(p_oos >= oos_threshold, "not a car",
                          np.where(p_big >= big_threshold, "big", "small"))
@@ -47,7 +38,6 @@ def save_config(**values):
 
 
 class CarSizer:
-    """Load once, then call .predict(pil_image)."""
 
     def __init__(self, weights_path=WEIGHTS_PATH, config=None):
         from .clip_gate import ClipZeroShot

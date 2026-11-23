@@ -1,4 +1,3 @@
-"""ResNet-18 transfer learning: build, train, predict."""
 import copy
 import random
 import time
@@ -23,21 +22,17 @@ def get_device():
 
 
 def build_resnet18(freeze_backbone, pretrained=True):
-    """ResNet-18 pretrained on ImageNet, with a new head (one output per class: small, big).
-    freeze_backbone=True  -> only the new head learns (fast, the baseline)
-    freeze_backbone=False -> every layer is fine-tuned"""
     from torchvision.models import resnet18, ResNet18_Weights
     model = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1 if pretrained else None)
     if freeze_backbone:
         for p in model.parameters():
             p.requires_grad = False
-    model.fc = nn.Linear(model.fc.in_features, len(CLASSES))  # new head, always trainable
+    model.fc = nn.Linear(model.fc.in_features, len(CLASSES))
     return model
 
 
 @torch.no_grad()
 def predict_probs(model, loader, device):
-    """Softmax probabilities for every image in the loader, plus the true labels."""
     model.eval()
     probs, labels = [], []
     for x, y in loader:
@@ -47,7 +42,6 @@ def predict_probs(model, loader, device):
 
 
 def train(model, train_loader, val_loader, epochs, lr, device, class_weights=None, weight_decay=1e-4):
-    """Standard training loop. Keeps the weights from the epoch with the best validation macro-F1."""
     model.to(device)
     weight = None if class_weights is None else torch.tensor(class_weights, dtype=torch.float32, device=device)
     loss_fn = nn.CrossEntropyLoss(weight=weight)
@@ -63,17 +57,16 @@ def train(model, train_loader, val_loader, epochs, lr, device, class_weights=Non
         total, correct, loss_sum = 0, 0, 0.0
         for x, y in train_loader:
             x, y = x.to(device), y.to(device)
-            outputs = model(x)               # forward
-            loss = loss_fn(outputs, y)       # how wrong
-            optimizer.zero_grad()            # clear old gradients
-            loss.backward()                  # compute gradients
-            optimizer.step()                 # update weights
+            outputs = model(x)
+            loss = loss_fn(outputs, y)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
             loss_sum += loss.item() * len(y)
             correct += (outputs.argmax(1) == y).sum().item()
             total += len(y)
         scheduler.step()
 
-        # validation
         model.eval()
         v_total, v_correct, v_loss, preds, trues = 0, 0, 0.0, [], []
         with torch.no_grad():

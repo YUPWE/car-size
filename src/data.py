@@ -1,5 +1,3 @@
-"""Data: download Stanford Cars, turn 196 car models into BIG / SMALL labels,
-remove duplicates, and split by car model so test cars are models the network never saw."""
 import io
 import os
 import re
@@ -10,10 +8,9 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 
-CLASSES = ["small", "big"]          # index 1 = "big" = the positive class
-BIG_BODY = {"SUV", "Cab", "Van", "Minivan"}          # SUVs, pickup trucks, vans
+CLASSES = ["small", "big"]
+BIG_BODY = {"SUV", "Cab", "Van", "Minivan"}
 SMALL_BODY = {"Sedan", "Hatchback", "Coupe", "Convertible", "Wagon"}
-# The 15 model names that don't contain a body-type word, labelled by hand:
 MANUAL_BODY = {
     "Acura TL Type-S 2008": "Sedan", "Acura Integra Type R 2001": "Coupe",
     "Buick Regal GS 2012": "Sedan", "Chevrolet Corvette ZR1 2012": "Coupe",
@@ -29,12 +26,12 @@ BODY_ORDER = ["SUV", "Cab", "Minivan", "Van", "Sedan", "Hatchback", "Coupe", "Co
 HF = "https://huggingface.co/datasets/tanganke/stanford_cars/resolve/main"
 PARQUETS = ["data/train-00000-of-00002.parquet", "data/train-00001-of-00002.parquet",
             "data/test-00000-of-00002.parquet", "data/test-00001-of-00002.parquet"]
-DATA_DIR = os.environ.get("CARS_DATA_DIR", "data/raw")   # Colab: fast local disk, set in the setup cell
+DATA_DIR = os.environ.get("CARS_DATA_DIR", "data/raw")
 IMG_DIR = os.path.join(DATA_DIR, "images")
 META = os.path.join(DATA_DIR, "meta.csv")
-CACHE_ZIP = "data/cars_resized.zip"                      # resized copy kept in Drive between sessions
+CACHE_ZIP = "data/cars_resized.zip"
 SPLIT_DIR = "splits"
-SHORT_SIDE = 256                                         # we store images resized to this (faster loading)
+SHORT_SIDE = 256
 
 
 def body_type(model_name):
@@ -51,20 +48,16 @@ def size_label(model_name):
 
 
 def model_group(model_name):
-    """Make + first model word, e.g. 'Chevrolet Silverado 1500 Regular Cab 2012' -> 'Chevrolet Silverado'.
-    All years/variants of a car family land in the same group, so they can't be split across train and test."""
     return " ".join(model_name.split()[:2])
 
 
 def class_names():
-    """The 196 model names, in label order, read from the dataset card."""
     text = urllib.request.urlopen(f"{HF}/README.md").read().decode()
     names = re.findall(r"'(\d+)': (.+)", text)
     return [n.strip() for _, n in names][:196]
 
 
 def download():
-    """Get the images onto local disk: from the Drive cache if we have it, else from Hugging Face (~2 GB)."""
     if os.path.exists(META):
         return
     if os.path.exists(CACHE_ZIP):
@@ -86,7 +79,7 @@ def download():
             im = Image.open(io.BytesIO(img["bytes"])).convert("RGB")
             w, h = im.size
             scale = SHORT_SIDE / min(w, h)
-            if scale < 1:                                   # only shrink, never enlarge
+            if scale < 1:
                 im = im.resize((round(w * scale), round(h * scale)), Image.BILINEAR)
             name = f"{tag}{shard}_{i:05d}.jpg"
             im.save(os.path.join(IMG_DIR, name), quality=90)
@@ -112,7 +105,6 @@ def load_meta():
 
 
 def perceptual_hashes(paths):
-    """64-bit perceptual hash per image, packed into one integer each."""
     import imagehash
     out = np.empty(len(paths), dtype=np.uint64)
     for k, p in enumerate(paths):
@@ -122,7 +114,6 @@ def perceptual_hashes(paths):
 
 
 def near_duplicate_pairs(hashes, max_dist=4, chunk=2000):
-    """All pairs (i < j) whose hashes differ in <= max_dist bits. Done in chunks to save memory."""
     pairs = []
     for s in range(0, len(hashes), chunk):
         block = hashes[s:s + chunk, None] ^ hashes[None, :]
@@ -135,7 +126,6 @@ def near_duplicate_pairs(hashes, max_dist=4, chunk=2000):
 
 
 def make_splits(df, seed=42):
-    """About 70 / 15 / 15, whole car families (groups) per split, big/small ratio kept similar."""
     from sklearn.model_selection import StratifiedGroupKFold
     df = df.copy()
     outer = StratifiedGroupKFold(n_splits=7, shuffle=True, random_state=seed)
@@ -163,7 +153,6 @@ def load_split(name):
     return pd.read_csv(path)
 
 
-# ---------- PyTorch side ----------
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
 
@@ -173,13 +162,13 @@ def get_transforms(train):
     if train:
         return T.Compose([
             T.RandomResizedCrop(224, scale=(0.6, 1.0), ratio=(0.6, 1.8)),
-            T.RandomHorizontalFlip(),          # a car facing left is the same size as facing right
-            T.ColorJitter(0.3, 0.3, 0.3),      # day / dusk / shade
+            T.RandomHorizontalFlip(),
+            T.ColorJitter(0.3, 0.3, 0.3),
             T.ToTensor(),
             T.Normalize(IMAGENET_MEAN, IMAGENET_STD),
         ])
     return T.Compose([
-        T.Resize((224, 224)),                  # squash, so the whole car stays in view
+        T.Resize((224, 224)),
         T.ToTensor(),
         T.Normalize(IMAGENET_MEAN, IMAGENET_STD),
     ])

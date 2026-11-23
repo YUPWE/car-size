@@ -1,7 +1,3 @@
-"""Deploy-bonus app: upload a photo of a car -> big (SUV / pickup / van), small, or "not a car".
-Run locally:  python app.py      (needs weights/resnet18_finetuned.pt and results/system_config.json)
-Hugging Face Spaces (Gradio SDK): upload app.py, requirements.txt, src/, weights/resnet18_finetuned.pt,
-results/system_config.json."""
 import gradio as gr
 
 from src.system import CarSizer
