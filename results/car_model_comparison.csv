@@ -1,0 +1,4 @@
+model,top-1 accuracy,top-5 accuracy,macro-F1
+CLIP zero-shot (no training),0.656,0.953,0.51
+ResNet-18 fine-tuned,0.016,0.031,0.003
+ResNet + CLIP mix (w=0.0),0.656,0.953,0.51

@@ -125,6 +125,36 @@ def near_duplicate_pairs(hashes, max_dist=4, chunk=2000):
     return pairs
 
 
+def make_model_splits(df, groups, seed=42):
+    from sklearn.model_selection import StratifiedGroupKFold
+    df = df.copy()
+    df["dup_group"] = groups
+    outer = StratifiedGroupKFold(n_splits=7, shuffle=True, random_state=seed)
+    rest_idx, test_idx = next(outer.split(df, df["model_id"], df["dup_group"]))
+    rest = df.iloc[rest_idx]
+    inner = StratifiedGroupKFold(n_splits=6, shuffle=True, random_state=seed)
+    train_idx, val_idx = next(inner.split(rest, rest["model_id"], rest["dup_group"]))
+    df["split"] = ""
+    df.iloc[test_idx, df.columns.get_loc("split")] = "test"
+    df.loc[rest.index[train_idx], "split"] = "train"
+    df.loc[rest.index[val_idx], "split"] = "val"
+    return df
+
+
+def duplicate_groups(n, pairs):
+    parent = list(range(n))
+
+    def find(a):
+        while parent[a] != a:
+            parent[a] = parent[parent[a]]
+            a = parent[a]
+        return a
+
+    for i, j in pairs:
+        parent[find(i)] = find(j)
+    return [find(i) for i in range(n)]
+
+
 def make_splits(df, seed=42):
     from sklearn.model_selection import StratifiedGroupKFold
     df = df.copy()
@@ -175,9 +205,9 @@ def get_transforms(train):
 
 
 class CarDataset:
-    def __init__(self, df, transform):
+    def __init__(self, df, transform, targets=None):
         self.paths = df["path"].tolist()
-        self.labels = [CLASSES.index(l) for l in df["label"]]
+        self.labels = list(targets) if targets is not None else [CLASSES.index(l) for l in df["label"]]
         self.transform = transform
 
     def __len__(self):

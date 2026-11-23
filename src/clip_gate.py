@@ -63,5 +63,22 @@ class ClipZeroShot:
         return np.concatenate(class_probs), np.concatenate(p_oos)
 
 
+    @torch.no_grad()
+    def text_embeddings(self, texts):
+        tok = self.processor(text=list(texts), return_tensors="pt", padding=True).to(self.device)
+        t = self._as_tensor(self.model.get_text_features(**tok))
+        return (t / t.norm(dim=-1, keepdim=True)).cpu().numpy()
+
+    @torch.no_grad()
+    def image_embeddings(self, images, batch_size=32):
+        out = []
+        for i in range(0, len(images), batch_size):
+            batch = [im.convert("RGB") for im in images[i:i + batch_size]]
+            pix = self.processor(images=batch, return_tensors="pt").to(self.device)
+            e = self._as_tensor(self.model.get_image_features(**pix))
+            out.append((e / e.norm(dim=-1, keepdim=True)).cpu().numpy())
+        return np.concatenate(out)
+
+
 def load_pil(paths):
     return [Image.open(p).convert("RGB") for p in paths]

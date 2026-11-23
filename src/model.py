@@ -21,13 +21,13 @@ def get_device():
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def build_resnet18(freeze_backbone, pretrained=True):
+def build_resnet18(freeze_backbone, pretrained=True, num_classes=None):
     from torchvision.models import resnet18, ResNet18_Weights
     model = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1 if pretrained else None)
     if freeze_backbone:
         for p in model.parameters():
             p.requires_grad = False
-    model.fc = nn.Linear(model.fc.in_features, len(CLASSES))
+    model.fc = nn.Linear(model.fc.in_features, num_classes or len(CLASSES))
     return model
 
 
