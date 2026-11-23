@@ -89,13 +89,13 @@ _TODO after notebook 04: pick 5+ images from `results/failures/` (listed in `fai
 From a fresh Google Colab (GPU runtime: *Runtime → Change runtime type → T4 GPU*):
 
 1. Open `notebooks/01_data.ipynb` in Colab (*File → Open notebook → GitHub*, paste this repo's URL).
-2. Run the first cell. It mounts Google Drive, clones the repo to `MyDrive/car-size` (shared by all four notebooks), installs `requirements.txt`, and keeps the images on Colab's fast local disk.
+2. Run the first cell. It mounts Google Drive, clones the repo to `MyDrive/car-size` (shared by all four notebooks), installs the one missing library (`imagehash`; everything else comes with Colab, and notebook 02 prints the exact versions), and keeps the images on Colab's fast local disk.
 3. Run the notebooks in order:
    - `01_data` downloads ~2 GB from Hugging Face (3–5 min) and saves a resized copy to Drive (`data/cars_resized.zip`), so later notebooks start in seconds.
    - Then `02_train` (~15–25 min on a T4) → `03_foundation` → `04_evaluate`.
 4. Results appear in `results/`, and the models are saved in `weights/`.
 
-Run the demo locally: `pip install -r requirements.txt && python app.py`
+Run locally or on Hugging Face Spaces: `pip install -r requirements.txt` (pinned versions), then `python app.py`
 
 **Deploy (Hugging Face Spaces):** create a Space with the **Gradio** SDK and upload `app.py`, `requirements.txt`, `src/`, `weights/resnet18_finetuned.pt` and `results/system_config.json`. Live demo: _link_
 
